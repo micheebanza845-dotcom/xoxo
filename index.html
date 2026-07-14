@@ -461,5 +461,58 @@ Merci de me conseiller et de confirmer la disponibilité, le paiement et la livr
       showRoute(location.hash.slice(1)||'accueil');
     });
   </script>
+  <script>
+(function () {
+  const menuButton = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (!menuButton || !mobileMenu) return;
+
+  menuButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    mobileMenu.classList.toggle('open');
+
+    menuButton.setAttribute(
+      'aria-expanded',
+      mobileMenu.classList.contains('open') ? 'true' : 'false'
+    );
+  });
+
+  mobileMenu.querySelectorAll('[data-route]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      const route = button.dataset.route;
+
+      document.querySelectorAll('.app-page').forEach(function (page) {
+        page.classList.toggle(
+          'active',
+          page.dataset.page === route
+        );
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(function (navButton) {
+        navButton.classList.toggle(
+          'active',
+          navButton.dataset.route === route
+        );
+      });
+
+      mobileMenu.classList.remove('open');
+      window.location.hash = route;
+      window.scrollTo(0, 0);
+    });
+  });
+
+  document.addEventListener('click', function (event) {
+    if (
+      !mobileMenu.contains(event.target) &&
+      !menuButton.contains(event.target)
+    ) {
+      mobileMenu.classList.remove('open');
+    }
+  });
+})();
+  </script>
 </body>
 </html>
